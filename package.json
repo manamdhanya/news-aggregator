@@ -1,0 +1,20 @@
+{
+  "name": "news-aggregator",
+  "version": "1.0.0",
+  "description": "News aggregator built by GDSC MPSTME - Web Dev",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Moksh Shah",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

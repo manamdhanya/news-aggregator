@@ -1,9 +1,12 @@
 const express = require("express");
 const axios = require("axios");
+const CORS = require("cors");
 const app = express();
 const port = 3000;
 
 require("dotenv").config();
+
+app.use(CORS())
 
 // groq
 

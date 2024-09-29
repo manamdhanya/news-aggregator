@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOMEPAGE</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+    rel="stylesheet"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900&display=swap"
+    rel="stylesheet"
+  />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          merriweather: ["Merriweather", "serif"],
+        },
+        colors: {},
+      },
+    },
+  };
+
+  async function fetchNews(category = "general") {
+    try {
+      const response = await fetch(`http://localhost:3000/top-articles`);
+      const data = await response.json();
+      console.log(data);
+      populateNews(data);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    }
+  }
+
+  function populateNews(data) {
+    const bestOfDay = data[0];
+    document.querySelector(".best-of-the-day-title").textContent =
+      bestOfDay.title;
+    document.querySelector(".best-of-the-day-image").src = bestOfDay.image;
+    document.querySelector(".best-of-the-day-content").textContent =
+      bestOfDay.summary;
+
+    const recommendedList = document.querySelector(".recommended-list");
+    recommendedList.innerHTML = "";
+    data.slice(1, 5).forEach((newsItem) => {
+      const url = new URL(newsItem.link);
+      // Extract the hostname (e.g., www.ndtv.com) and remove the 'www.' prefix if present
+      let domain = url.hostname.replace(/^www\./, '');
+      const domainPeriodIndex = domain.lastIndexOf('.')
+      //removes anything extra that might have come in the domain name
+      domain = domainPeriodIndex !== -1 ? domain.substring(0, domainPeriodIndex).trim() : domain;
+      const title = newsItem.title;
+      const lastColonIndex = title.lastIndexOf(':');
+      //removes everything after the last ':' and last '-' in the title of the article
+      let cleanedTitle = lastColonIndex !== -1 ? title.substring(0, lastColonIndex).trim() : title;
+      const lastHyphenIndex = title.lastIndexOf('-');
+      cleanedTitle = lastHyphenIndex !== -1 ? cleanedTitle.substring(0, lastHyphenIndex).trim() : cleanedTitle;
+      
+      const listItem = `
+          <li>
+            <a href="${newsItem.link}" class="flex items-center space-x-4 md:space-x-2">
+              <img src="${newsItem.image}" alt="Article Image" class="w-16 h-16 object-cover rounded-lg" />
+              <div>
+                <p style="font-size: 14px;font-weight: bold;" class="text-lg md:text-base xs:text-xs font-bold">${cleanedTitle}</p>
+                <p class="text-xs">Source : ${domain}</p>
+              </div>
+            </a>
+          </li>`;
+          
+        recommendedList.innerHTML += listItem;
+
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document
+      .getElementById("news-category")
+      .addEventListener("change", (event) => {
+        fetchNews(event.target.value);
+      });
+
+    fetchNews();
+  });
+</script>
+
+<body>
+  <nav class="flex items-center justify-center pt-6 py-6">
+    <p class="font-merriweather lg:text-4xl font-thin mx-auto sm:text-sm md:text-2xl">
+      THE<span class="font-extrabold">VIEW</span>ISLAND
+    </p>
+  </nav>
+
+  <nav class="flex items-center justify-between pt-6 py-6 bg-black italic font-light">
+    <div class="flex-1 flex justify-center">
+      <p class="text-white ml-3 text-xs sm:text-xs block lg:text-base">
+        Start the day here!!
+      </p>
+    </div>
+  </nav>
+
+  <div class="md:flex justify-between p-6 space-x-6 flex-row-reverse">
+    <aside class="hidden sm:block w-80 md:w-64 sm:w-48 h-[45em] md:h-[45em] sm:h-[45em] p-6 ml-12 text-white rounded-lg shadow-lg bg-black">
+      <h2 class="text-xl md:text-lg sm:text-base font-bold mb-4">Recommended</h2>
+      <ul class="space-y-4 recommended-list"></ul>
+    </aside>
+
+    <div class="Top-news flex-1">
+      <div>
+        <p class="bg-gradient-to-r from-gray-500 w-56 font-semibold ml-6 mt-10 py-2 px-2 sm:w-44 sm:ml-4 sm:text-sm">
+          Select Type of News
+        </p>
+        <select
+          id="news-category"
+          class="w-56 sm:w-44 mt-4 ml-6 border-gray-300 border-2 rounded-lg py-2 px-4 text-gray-700 bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 sm:text-sm"
+        >
+          <option value="business">Business</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="general">General</option>
+          <option value="health">Health</option>
+          <option value="science">Science</option>
+          <option value="sports">Sports</option>
+          <option value="technology">Technology</option>
+        </select>
+      </div>
+
+      <div>
+        <p class="bg-gradient-to-r from-gray-500 w-44 font-semibold ml-6 mt-10 py-2 px-2 sm:w-36 sm:ml-4 sm:text-sm">
+          BEST OF THE DAY
+        </p>
+      </div>
+
+      <div>
+        <p class="ont-merriweather lg:text-6xl mt-5 ml-6 font-semibold sm:text-sm md:text-4xl best-of-the-day-title">
+          <!-- TITLE -->
+        </p>
+        <div class="flex flex-col sm:flex-row">
+          <div class="flex sm:flex-row">
+            <p class="text-black mt-5 ml-6 font-base sm:text-xs text-xs best-of-the-day-source">
+              <!-- SOURCE -->
+            </p>
+            <p class="text-black mt-5 ml-6 font-base sm:text-xs text-xs best-of-the-day-time">
+              <!-- TIME -->
+            </p>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <img
+            class="mt-8 sm:mt-10 ml-4 sm:ml-12 mr-4 sm:mr-6 w-[22rem] h-[15rem] sm:w-[30rem] sm:h-[18rem] md:w-[40rem] md:h-[20rem] lg:w-[45rem] lg:h-[22rem] best-of-the-day-image"
+          />
+        </div>
+        <div class="bg-black text-white p-6 mt-5"> <!-- Added background and padding -->
+          <p class="text-black mt-7 ml-6 font-semibold sm:text-base text-sm">
+            Content
+          </p>
+          <p class="ont-merriweather lg:text-sm mt-5 font-base sm:text-sm md:text-base best-of-the-day-content">
+            <!-- CONTENT -->
+          </p>
+        </div>
+        <div class="flex justify-center">
+          <button
+            class="rounded-3xl border border-black text-black text-base px-6 py-3 mt-5 mb-5 hover:bg-black hover:text-white"
+            onclick="window.location.href='page1.html'"
+          >
+            Read More ->
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="block sm:hidden Recommended-small">
+      <h2 class="text-xl md:text-lg sm:text-base font-bold mb-4">Recommended</h2>
+      <ul class="space-y-4">
+        <li>
+          <a href="#" class="flex items-start space-x-4 md:space-x-2">
+            <img
+              src="https://img.freepik.com/premium-photo/abstract-wallpaper-with-bitcoin-splatter-design-with-random-illustration-crypto-trading-background_1020495-317590.jpg"
+              alt="Article Image"
+              class="w-16 h-16 object-cover rounded-lg"
+            />
+            <div>
+              <p class="text-sm md:text-xs sm:text-xs font-medium">
+                US-Approved Spot Bitcoin ETFs Could Surpass...
+              </p>
+              <p class="text-xs">Blockchain News · 4 hours ago</p>
+            </div>
+          </a>
+        </li>
+        <li>
+          <a href="#" class="flex items-start space-x-4 md:space-x-2">
+            <img
+              src="https://img.freepik.com/premium-photo/abstract-wallpaper-with-bitcoin-splatter-design-with-random-illustration-crypto-trading-background_1020495-317590.jpg"
+              alt="Article Image"
+              class="w-16 h-16 object-cover rounded-lg"
+            />
+            <div>
+              <p class="text-sm md:text-xs sm:text-xs font-medium">
+                US-Approved Spot Bitcoin ETFs Could Surpass...
+              </p>
+              <p class="text-xs">Blockchain News · 4 hours ago</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

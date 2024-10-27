@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HOMEPAGE</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="/index.js" defer></script>
 </head>
@@ -29,17 +26,41 @@
       },
     },
   };
+  function searchArticles() {
+    var input = document.getElementById('searchInput');
+    var filter = input.value.toUpperCase();
+    var articles = document.querySelectorAll('.article');
 
+    console.log("Filter:", filter);
+
+    for (var i = 0; i < articles.length; i++) {
+      var article = articles[i];
+      var title = article.querySelector('.article-title');
+
+      if (title) {
+        console.log("Checking article title:", title.innerHTML);
+
+        if (title.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          article.style.display = 'flex';
+          console.log("Matched:", title.innerHTML);
+        } else {
+          article.style.display = 'none';
+        }
+      } else {
+        console.log("No title found for article", i);
+      }
+    }
+  }
 </script>
 
-<body>
+<body class="bg-white text-black dark:bg-gray-900 dark:text-gray-200">
   <nav class="flex items-center justify-center pt-6 py-6">
     <p class="font-merriweather lg:text-4xl font-thin mx-auto sm:text-sm md:text-2xl">
       THE<span class="font-extrabold">VIEW</span>ISLAND
     </p>
   </nav>
 
-  <nav class="flex items-center justify-between pt-6 py-6 bg-black italic font-light">
+  <nav class="flex items-center justify-between pt-6 py-6 bg-black italic font-light dark:bg-gray-800">
     <div class="flex-1 flex justify-center">
       <p class="text-white ml-3 text-xs sm:text-xs block lg:text-base">
         Start the day here!!
@@ -48,8 +69,17 @@
   </nav>
 
   <div class="md:flex justify-between p-6 space-x-6 flex-row-reverse">
-    <aside class="hidden sm:block w-80 md:w-64 sm:w-48 h-[45em] md:h-[45em] sm:h-[45em] p-6 ml-12 text-white rounded-lg shadow-lg bg-black">
-      <h2 class="text-xl md:text-lg sm:text-base font-bold mb-4">Recommended</h2>
+    <aside
+      class="hidden sm:block w-80 md:w-64 sm:w-48 h-[45em] md:h-[45em] sm:h-[45em] p-6 ml-12 text-white rounded-lg shadow-lg bg-black dark:bg-gray-800">
+      <form action="javascript:void(0);" onsubmit="searchArticles()" class="flex items-center">
+        <input id="searchInput" type="text" placeholder="Search..."
+          class="border-2 border-gray-300 px-4 py-2 w-full text-black focus:outline-none focus:border-white" />
+        <button type="submit"
+          class="float-left w-1/5 p-2 bg-black text-white text-lg border border-gray-400 border-l-0 cursor-pointer focus:outline-none dark:bg-gray-800">
+          <i class="fa fa-search"></i>
+        </button>
+      </form>
+      <h2 class="text-xl md:text-lg sm:text-base font-bold mb-4 mt-4">Recommended</h2>
       <ul class="space-y-4 recommended-list"></ul>
     </aside>
 
@@ -58,10 +88,8 @@
         <p class="bg-gradient-to-r from-gray-500 w-56 font-semibold ml-6 mt-10 py-2 px-2 sm:w-44 sm:ml-4 sm:text-sm">
           Select Type of News
         </p>
-        <select
-          id="news-category"
-          class="w-56 sm:w-44 mt-4 ml-6 border-gray-300 border-2 rounded-lg py-2 px-4 text-gray-700 bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 sm:text-sm"
-        >
+        <select id="news-category"
+          class="w-56 sm:w-44 mt-4 ml-6 border-gray-300 border-2 rounded-lg py-2 px-4 text-gray-700 bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-gray-400 sm:text-sm">
           <option value="business">Business</option>
           <option value="entertainment">Entertainment</option>
           <option value="general">General</option>
@@ -94,22 +122,20 @@
         </div>
         <div class="flex justify-center">
           <img
-            class="mt-8 sm:mt-10 ml-4 sm:ml-12 mr-4 sm:mr-6 w-[22rem] h-[15rem] sm:w-[30rem] sm:h-[18rem] md:w-[40rem] md:h-[20rem] lg:w-[45rem] lg:h-[22rem] best-of-the-day-image"
-          />
+            class="mt-8 sm:mt-10 ml-4 sm:ml-12 mr-4 sm:mr-6 w-[22rem] h-[15rem] sm:w-[30rem] sm:h-[18rem] md:w-[40rem] md:h-[20rem] lg:w-[45rem] lg:h-[22rem] best-of-the-day-image" />
         </div>
-        <div class="bg-black text-white p-6 mt-5"> <!-- Added background and padding -->
-          <p class="text-black mt-7 ml-6 font-semibold sm:text-base text-sm">
+        <div class="bg-black text-white p-6 mt-5 dark:bg-gray-800 "> <!-- Added background and padding -->
+          <p class="text-black mt-7 ml-6 font-semibold sm:text-base text-sm dark:text-gray-200">
             Content
           </p>
-          <p class="ont-merriweather lg:text-sm mt-5 font-base sm:text-sm md:text-base best-of-the-day-content">
+          <p class="ont-merriweather lg:text-sm mt-5 font-base sm:text-sm md:text-base best-of-the-day-content dark:text-gray-200">
             <!-- CONTENT -->
           </p>
         </div>
         <div class="flex justify-center">
           <button
-            class="rounded-3xl border border-black text-black text-base px-6 py-3 mt-5 mb-5 hover:bg-black hover:text-white"
-            onclick="window.location.href='page1.html'"
-          >
+            class="rounded-3xl border border-black text-black text-base px-6 py-3 mt-5 mb-5 hover:bg-black hover:text-white dark:text-gray-200 dark:border-gray-200 dark:hover:bg-gray-200 dark:hover:text-black"
+            onclick="window.location.href='page1.html'">
             Read More ->
           </button>
         </div>
@@ -117,35 +143,72 @@
     </div>
 
     <div class="block sm:hidden Recommended-small">
+      <form action="javascript:void(0);" onsubmit="searchArticles()" class="flex items-center">
+        <input id="searchInput" type="text" placeholder="Search..."
+          class="border-2 border-gray-300 px-4 py-2 w-full focus:outline-none focus:border-black" />
+        <button type="submit"
+          class="float-left w-1/5 p-2 bg-black text-white text-lg border border-gray-400 border-l-0 cursor-pointer focus:outline-none dark:bg-gray-800">
+          <i class="fa fa-search"></i>
+        </button>
+      </form>
       <h2 class="text-xl md:text-lg sm:text-base font-bold mb-4">Recommended</h2>
       <ul class="space-y-4">
-        <li>
+        <li class="article">
           <a href="#" class="flex items-start space-x-4 md:space-x-2">
             <img
               src="https://img.freepik.com/premium-photo/abstract-wallpaper-with-bitcoin-splatter-design-with-random-illustration-crypto-trading-background_1020495-317590.jpg"
-              alt="Article Image"
-              class="w-16 h-16 object-cover rounded-lg"
-            />
+              alt="Article Image" class="w-16 h-16 object-cover rounded-lg">
             <div>
-              <p class="text-sm md:text-xs sm:text-xs font-medium">
-                US-Approved Spot Bitcoin ETFs Could Surpass...
-              </p>
+              <p class="article-title text-sm md:text-xs sm:text-xs font-medium">US-Approved Spot Bitcoin ETFs Could
+                Surpass...</p>
               <p class="text-xs">Blockchain News · 4 hours ago</p>
             </div>
           </a>
         </li>
-        <li>
+        <li class="article">
           <a href="#" class="flex items-start space-x-4 md:space-x-2">
             <img
               src="https://img.freepik.com/premium-photo/abstract-wallpaper-with-bitcoin-splatter-design-with-random-illustration-crypto-trading-background_1020495-317590.jpg"
-              alt="Article Image"
-              class="w-16 h-16 object-cover rounded-lg"
-            />
+              alt="Article Image" class="w-16 h-16 object-cover rounded-lg">
             <div>
-              <p class="text-sm md:text-xs sm:text-xs font-medium">
-                US-Approved Spot Bitcoin ETFs Could Surpass...
-              </p>
+              <p class="article-title text-sm md:text-xs sm:text-xs font-medium">Bitcoin ETFs Could Surpass...</p>
               <p class="text-xs">Blockchain News · 4 hours ago</p>
+            </div>
+          </a>
+        </li>
+        <li class="article">
+          <a href="#" class="flex items-start space-x-4 md:space-x-2">
+            <img
+              src="https://img.freepik.com/premium-photo/abstract-wallpaper-with-bitcoin-splatter-design-with-random-illustration-crypto-trading-background_1020495-317590.jpg"
+              alt="Article Image" class="w-16 h-16 object-cover rounded-lg">
+            <div>
+              <p class="article-title text-sm md:text-xs sm:text-xs font-medium">Cryptocurrency Regulations: What to
+                Expect in 2024</p>
+              <p class="text-xs">Crypto Insights · 2 hours ago</p>
+            </div>
+          </a>
+        </li>
+        <li class="article">
+          <a href="#" class="flex items-start space-x-4 md:space-x-2">
+            <img
+              src="https://img.freepik.com/premium-photo/abstract-wallpaper-with-bitcoin-splatter-design-with-random-illustration-crypto-trading-background_1020495-317590.jpg"
+              alt="Article Image" class="w-16 h-16 object-cover rounded-lg">
+            <div>
+              <p class="article-title text-sm md:text-xs sm:text-xs font-medium">The Rise of Decentralized Finance: Key
+                Trends to Watch</p>
+              <p class="text-xs">Finance Today · 1 hour ago</p>
+            </div>
+          </a>
+        </li>
+        <li class="article">
+          <a href="#" class="flex items-start space-x-4 md:space-x-2">
+            <img
+              src="https://img.freepik.com/premium-photo/abstract-wallpaper-with-bitcoin-splatter-design-with-random-illustration-crypto-trading-background_1020495-317590.jpg"
+              alt="Article Image" class="w-16 h-16 object-cover rounded-lg">
+            <div>
+              <p class="article-title text-sm md:text-xs sm:text-xs font-medium">Bitcoin Price Predictions for 2024:
+                Experts Weigh In</p>
+              <p class="text-xs">Market Analysis · 30 minutes ago</p>
             </div>
           </a>
         </li>
@@ -153,4 +216,5 @@
     </div>
   </div>
 </body>
+
 </html>
